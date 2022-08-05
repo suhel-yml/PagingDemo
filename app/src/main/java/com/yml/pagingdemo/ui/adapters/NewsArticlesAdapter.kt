@@ -2,6 +2,7 @@ package com.yml.pagingdemo.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yml.pagingdemo.R
@@ -39,7 +40,10 @@ class NewsArticlesAdapter :
         fun bind(item: NewsArticleModel) {
             tvSource.text = item.source.name
             tvName.text = item.title
-            tvDescription.text = item.description
+            tvDescription.text = HtmlCompat.fromHtml(
+                item.description,
+                HtmlCompat.FROM_HTML_MODE_COMPACT
+            )
         }
 
     }

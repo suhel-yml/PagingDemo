@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yml.pagingdemo.data.NewsApi
 import com.yml.pagingdemo.databinding.ActivityMainBinding
@@ -83,9 +82,7 @@ class MainActivity : AppCompatActivity() {
             newsArticlesAdapter
         )
 
-        binding.rvRepos.addItemDecoration(
-            DividerItemDecoration(this, layoutManager.orientation)
-        )
+        binding.rvRepos.addItemDecoration(HorizontalDividerDecoration())
 
         // Refresh the PagingDataAdapter responsible for paginating through
         // the news articles
