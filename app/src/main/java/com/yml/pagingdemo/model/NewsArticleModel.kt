@@ -1,20 +1,11 @@
 package com.yml.pagingdemo.model
 
-import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class NewsArticleModel(
-    @SerializedName("source")
-    val source: NewsArticleSourceModel,
-
-    @SerializedName("author")
-    val author: String,
-
-    @SerializedName("title")
+    val source: String,
     val title: String,
-
-    @SerializedName("description")
     val description: String,
-
-    @SerializedName("url")
     val url: String,
+    val publishedAt: Date,
 )

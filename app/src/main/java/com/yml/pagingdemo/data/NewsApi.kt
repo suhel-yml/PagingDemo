@@ -1,6 +1,6 @@
 package com.yml.pagingdemo.data
 
-import com.yml.pagingdemo.model.NewsArticlesResponseModel
+import com.yml.pagingdemo.data.model.NewsArticlesResponseModel
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

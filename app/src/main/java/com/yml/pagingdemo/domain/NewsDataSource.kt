@@ -1,4 +1,4 @@
-package com.yml.pagingdemo.data
+package com.yml.pagingdemo.domain
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -7,8 +7,8 @@ import okio.IOException
 import retrofit2.HttpException
 
 class NewsDataSource(
-    private val api: NewsApi,
     private val query: String,
+    private val useCaseFactory: FetchNewsArticlesByQueryUseCase.Factory,
 ) : PagingSource<Int, NewsArticleModel>() {
 
     /**
@@ -24,24 +24,9 @@ class NewsDataSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NewsArticleModel> {
         return try {
-            // Return empty page when the query is empty
-            if (query.isBlank()) {
-                return LoadResult.Page(
-                    data = emptyList(),
-                    prevKey = null,
-                    nextKey = null
-                )
-            }
-
             // The key is null when it is used to load for the first time
             val key = params.key ?: FIRST_PAGE_KEY
-            val response = api.getBitcoinNews(query, key, params.loadSize)
-
-            if (response.status != "ok") {
-                return LoadResult.Error(IOException("Response is not ok"))
-            }
-
-            val articles = response.articles
+            val articles = useCaseFactory.create(query, key, params.loadSize).execute()
 
             // Prev key is valid only if there are pages that exist
             // before the current page
@@ -59,6 +44,8 @@ class NewsDataSource(
         } catch (e: IOException) {
             LoadResult.Error(e)
         } catch (e: HttpException) {
+            LoadResult.Error(e)
+        } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }

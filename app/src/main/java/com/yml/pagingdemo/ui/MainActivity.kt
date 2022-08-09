@@ -1,5 +1,7 @@
 package com.yml.pagingdemo.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +36,12 @@ class MainActivity : AppCompatActivity() {
         binding.rvRepos.layoutManager = layoutManager
 
         val searchUIAdapter = SearchUIAdapter(viewModel.query)
-        val newsArticlesAdapter = NewsArticlesAdapter()
+        val newsArticlesAdapter = NewsArticlesAdapter { news ->
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(news.news.url))
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            }
+        }
 
         val loadingStateAdapter = LoadingStateAdapter()
         val emptyStateAdapter = EmptyStateAdapter(newsArticlesAdapter)
@@ -54,8 +61,8 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
-        // Update the `LoadingStateAdapter` and the `ErrorStateAdapter` with the
-        // `Paging` `LoadState` so that they can display the correct indicators
+// Update the `LoadingStateAdapter` and the `ErrorStateAdapter` with the
+// `Paging` `LoadState` so that they can display the correct indicators
         lifecycleScope.launch {
             newsArticlesAdapter.loadStateFlow.collectLatest { loadStates ->
                 // `loadStates.source` directly represents the state of the
